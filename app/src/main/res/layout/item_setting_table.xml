@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_12sdp"
+        android:elevation="@dimen/_8sdp"
+        app:cardCornerRadius="@dimen/_8sdp"
+        app:cardElevation="@dimen/_8sdp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/tableImage"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:contentDescription="icon_dinner"
+                android:src="@drawable/icon_dinner"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/editTableName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Table Number"
+                android:textSize="@dimen/_16sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tableImage"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Table 10" />
+
+            <TextView
+                android:id="@+id/tvTableId"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_16sdp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/btnSet"
+                app:layout_constraintStart_toEndOf="@+id/tableImage"
+                app:layout_constraintTop_toTopOf="@+id/btnSet"
+                tools:text="Id" />
+
+            <Button
+                android:id="@+id/btnSet"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
+                android:text="Set"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnDelete"
+                app:layout_constraintTop_toBottomOf="@+id/editTableName" />
+
+            <ImageView
+                android:id="@+id/btnDelete"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
+                android:src="@drawable/round_delete_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvTableId"
+                app:layout_constraintTop_toBottomOf="@+id/editTableName" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</LinearLayout>

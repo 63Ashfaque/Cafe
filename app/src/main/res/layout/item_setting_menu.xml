@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_12sdp"
+        android:elevation="@dimen/_8sdp"
+        app:cardCornerRadius="@dimen/_8sdp"
+        app:cardElevation="@dimen/_8sdp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/tvMenuImage"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:contentDescription="icon_dinner"
+                android:padding="@dimen/_12sdp"
+                android:src="@drawable/icon_burger"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvMenuId"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_16sdp"
+                app:layout_constraintEnd_toStartOf="@+id/tvMenuImage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Id" />
+
+            <ImageView
+                android:id="@+id/btnDelete"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:src="@drawable/round_delete_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/editMenuName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Menu Title"
+                android:textSize="@dimen/_16sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvMenuImage" />
+
+            <EditText
+                android:id="@+id/editMenuDesc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Menu Desc"
+                android:textSize="@dimen/_16sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editMenuName" />
+
+            <EditText
+                android:id="@+id/editMenuRate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Menu Rate"
+                android:textSize="@dimen/_16sdp"
+                android:inputType="number"
+                android:digits="0123456789"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editMenuDesc" />
+
+
+            <Button
+                android:id="@+id/btnSet"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_35sdp"
+                android:text="Set"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editMenuRate" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</LinearLayout>

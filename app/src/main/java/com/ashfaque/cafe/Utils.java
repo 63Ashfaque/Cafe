@@ -8,9 +8,8 @@ import com.intuit.sdp.BuildConfig;
 public class Utils {
 
 	public static void logD(String msg) {
-		if (BuildConfig.DEBUG) {
+
 			Log.d("Ashu", msg);
-		}
 
 	}
 

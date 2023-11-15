@@ -4,12 +4,16 @@ package com.ashfaque.cafe.sqlite;
 import static com.ashfaque.cafe.Utils.dbClose;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.ashfaque.cafe.Utils;
+import com.ashfaque.cafe.model.MenuModelClass;
 import com.ashfaque.cafe.model.TnTableModelClass;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,14 +116,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		List<TnTableModelClass> tableNumbers = new ArrayList<>();
 
 		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.query(TABLE_T_NUMBER, new String[]{COLUMN_T_TITLE,COLUMN_T_STATUS}, null, null, null, null, null);
+		Cursor cursor = db.query(TABLE_T_NUMBER, new String[]{COLUMN_T_ID,COLUMN_T_TITLE,COLUMN_T_STATUS}, null, null, null, null, null);
 
 		if (cursor != null && cursor.moveToFirst()) {
 			do {
 				TnTableModelClass modelClass=new TnTableModelClass();
+				 modelClass.setTableId(cursor.getInt(cursor.getColumnIndex(COLUMN_T_ID)));
 				 modelClass.setTableTitle(cursor.getString(cursor.getColumnIndex(COLUMN_T_TITLE)));
 				 modelClass.setTableStatus(cursor.getInt(cursor.getColumnIndex(COLUMN_T_STATUS)));
-
 				tableNumbers.add(modelClass);
 			} while (cursor.moveToNext());
 
@@ -129,7 +133,85 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		// Close the database
 		dbClose(db);
+		Utils.logD("getAllTableNumbers "+new Gson().toJson(tableNumbers));
+		return tableNumbers;
+	}
 
+	public void updateTableInfo(String tableId, String tTitle) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_T_TITLE, tTitle);
+
+		// Define the WHERE clause to identify the specific table number
+		String whereClause = COLUMN_T_ID + "=?";
+		String[] whereArgs = {tableId};
+
+		// Update the table status
+		db.update(TABLE_T_NUMBER, values, whereClause, whereArgs);
+
+		Utils.logD("updateTableStatus "+db.getPath());
+		// Close the database
+		dbClose(db);
+	}
+
+	public void deleteTableRow(String tableId) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		// Define the WHERE clause to identify the specific table number
+		String whereClause = COLUMN_T_ID + "=?";
+		String[] whereArgs = {tableId};
+
+		// Delete the row
+		db.delete(TABLE_T_NUMBER, whereClause, whereArgs);
+
+		// Close the database
+		dbClose(db);
+	}
+
+	public void updateTableStatus(int tableId, String newStatus) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_T_STATUS, newStatus);
+
+		// Define the WHERE clause to identify the specific table number
+		String whereClause = COLUMN_T_ID + "=?";
+		String[] whereArgs = {String.valueOf(tableId)};
+
+		// Update the table status
+		db.update(TABLE_T_NUMBER, values, whereClause, whereArgs);
+
+		Utils.logD("updateTableStatus "+db.getPath());
+		// Close the database
+		dbClose(db);
+	}
+
+
+	@SuppressLint("Range")
+	public List<MenuModelClass> getAllMenu() {
+		List<MenuModelClass> tableNumbers = new ArrayList<>();
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.query(TABLE_MENU, new String[]{COLUMN_MENU_ID,COLUMN_MENU_TITLE,COLUMN_MENU_DESC,COLUMN_MENU_RATE}, null, null, null, null, null);
+
+		if (cursor != null && cursor.moveToFirst()) {
+			do {
+				MenuModelClass modelClass=new MenuModelClass();
+				modelClass.setMenuId(cursor.getInt(cursor.getColumnIndex(COLUMN_MENU_ID)));
+				modelClass.setMenuTitle(cursor.getString(cursor.getColumnIndex(COLUMN_MENU_TITLE)));
+				modelClass.setMenuDesc(cursor.getString(cursor.getColumnIndex(COLUMN_MENU_DESC)));
+				modelClass.setMenuRate(cursor.getFloat(cursor.getColumnIndex(COLUMN_MENU_RATE)));
+				tableNumbers.add(modelClass);
+			} while (cursor.moveToNext());
+
+			// Close the cursor to avoid memory leaks
+			cursor.close();
+		}
+
+		// Close the database
+		dbClose(db);
+		Utils.logD("getAllTableNumbers "+new Gson().toJson(tableNumbers));
 		return tableNumbers;
 	}
 }

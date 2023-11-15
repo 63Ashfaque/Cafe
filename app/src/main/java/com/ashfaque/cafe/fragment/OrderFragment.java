@@ -30,7 +30,6 @@ public class OrderFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		dbHelper = new DatabaseHelper(getContext());
-		logD("dfgkjndgd "+new Gson().toJson(	dbHelper.getAllTableNumbers()));
 
 	}
 

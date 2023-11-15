@@ -3,16 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     tools:context=".fragment.SettingFragment">
 
-    <include
-        android:id="@+id/includeAddTable"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/include_add_table" />
+    <TextView
+        android:id="@+id/tvTableInfo"
+        style="@style/HeadingTextView"
+        android:text="Table Info"/>
+    <View
+        style="@style/view"/>
 
-
+    <TextView
+        android:id="@+id/tvMenuInfo"
+        style="@style/HeadingTextView"
+        android:text="Menu Info"/>
+    <View
+        style="@style/view"/>
 
 
 </LinearLayout>
