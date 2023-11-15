@@ -1,5 +1,10 @@
 package com.ashfaque.cafe.adapter;
 
+import static com.ashfaque.cafe.sqlite.DatabaseHelper.COLUMN_T_ID;
+import static com.ashfaque.cafe.sqlite.DatabaseHelper.COLUMN_T_TITLE;
+import static com.ashfaque.cafe.sqlite.DatabaseHelper.TABLE_T_NUMBER;
+
+import android.content.ContentValues;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,13 +52,16 @@ public class SettingTableAdapter extends RecyclerView.Adapter<SettingTableAdapte
 		holder.btnSet.setOnClickListener(view ->
 		{
 			dbHelper = new DatabaseHelper(view.getContext());
-			dbHelper.updateTableInfo(holder.tvTableId.getText().toString(), holder.editTableName.getText().toString());
+			ContentValues values = new ContentValues();
+			values.put(COLUMN_T_TITLE, holder.editTableName.getText().toString());
+			dbHelper.updateInfo(TABLE_T_NUMBER, values, COLUMN_T_ID, holder.tvTableId.getText().toString());
+
 		});
 
 		holder.btnDelete.setOnClickListener(view ->
 		{
 			dbHelper = new DatabaseHelper(view.getContext());
-			dbHelper.deleteTableRow(holder.tvTableId.getText().toString());
+			dbHelper.deleteRow(TABLE_T_NUMBER, COLUMN_T_ID, holder.tvTableId.getText().toString());
 			tableList.remove(tableItem);
 			notifyDataSetChanged();
 		});

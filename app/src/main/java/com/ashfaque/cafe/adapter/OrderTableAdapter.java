@@ -1,12 +1,14 @@
 package com.ashfaque.cafe.adapter;
 
+import android.app.Dialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -22,6 +24,7 @@ import java.util.List;
 public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.ViewHolder> {
 
 	private List<TnTableModelClass> tableList;
+	private DatabaseHelper dbHelper;
 
 	public OrderTableAdapter(List<TnTableModelClass> tableList) {
 		this.tableList = tableList;
@@ -40,14 +43,39 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Vi
 		TnTableModelClass tableItem = tableList.get(position);
 		holder.tableName.setText(tableItem.getTableTitle());
 
-		if(tableItem.getTableStatus()>0)
-		{
+		if (tableItem.getTableStatus() > 0) {
 			holder.constraintLayout.setBackgroundResource(R.color.red);
-		}else
-		{	holder.constraintLayout.setBackgroundResource(R.color.white);
-
+		} else {
+			holder.constraintLayout.setBackgroundResource(R.color.white);
 		}
 
+		holder.constraintLayout.setOnClickListener(view ->
+		{
+			showDialogBox(view);
+		});
+
+	}
+
+	String[] spinnerCount = { "1","2","3","4","5","6","7","10",};
+
+	private void showDialogBox(View view) {
+		dbHelper = new DatabaseHelper(view.getContext());
+		// custom dialog
+		final Dialog dialog = new Dialog(view.getContext());
+		dialog.setContentView(R.layout.dialog_order_item);
+		dialog.setCancelable(false);
+		Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
+		RecyclerView recyclerViewItemOrder = dialog.findViewById(R.id.recyclerViewItemOrder);
+		ItemOrderTableAdapter tableAdapter = new ItemOrderTableAdapter(dbHelper.getAllOrderItem());
+		recyclerViewItemOrder.setAdapter(tableAdapter);
+		// if button is clicked, close the custom dialog
+		dialogButton.setOnClickListener(v -> {
+			dialog.dismiss();
+			Toast.makeText(view.getContext(), "Dismissed..!!",Toast.LENGTH_SHORT).show();
+		});
+
+
+		dialog.show();
 	}
 
 	@Override

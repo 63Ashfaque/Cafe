@@ -2,6 +2,7 @@ package com.ashfaque.cafe.sqlite;
 
 
 import static com.ashfaque.cafe.Utils.dbClose;
+import static com.ashfaque.cafe.Utils.logD;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -12,6 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.ashfaque.cafe.Utils;
 import com.ashfaque.cafe.model.MenuModelClass;
+import com.ashfaque.cafe.model.OrderModelClass;
 import com.ashfaque.cafe.model.TnTableModelClass;
 import com.google.gson.Gson;
 
@@ -60,8 +62,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	////////////// Order table//////////////
 	public static final String TABLE_ORDER = "order_table";
 	public static final String COLUMN_ORDER_ID = "id";
-	public static final String COLUMN_ORDER_T_TITLE = "t_title";
-	public static final String COLUMN_ORDER_MENU_TITLE = "m_title";
+	public static final String COLUMN_ORDER_T_ID = "t_id";
+	public static final String COLUMN_ORDER_MENU_ID = "m_id";
 	public static final String COLUMN_ORDER_QUANTITY = "o_quantity";
 	public static final String COLUMN_ORDER_STATUS = "o_status";
 
@@ -101,8 +103,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		// Create TABLE_ORDER table
 		String createOrderTable = "CREATE TABLE " + TABLE_ORDER + " ("
 				+ COLUMN_ORDER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ COLUMN_ORDER_T_TITLE + " TEXT, "
-				+ COLUMN_ORDER_MENU_TITLE + " TEXT, "
+				+ COLUMN_ORDER_T_ID+ " INTEGER, "
+				+ COLUMN_ORDER_MENU_ID + " INTEGER, "
 				+ COLUMN_ORDER_QUANTITY + " INTEGER, "
 				+ COLUMN_ORDER_STATUS + " INTEGER)";
 		db.execSQL(createOrderTable);
@@ -116,7 +118,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		List<TnTableModelClass> tableNumbers = new ArrayList<>();
 
 		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.query(TABLE_T_NUMBER, new String[]{COLUMN_T_ID,COLUMN_T_TITLE,COLUMN_T_STATUS}, null, null, null, null, null);
+		Cursor cursor = db.query(TABLE_T_NUMBER, null, null, null, null, null, null);
 
 		if (cursor != null && cursor.moveToFirst()) {
 			do {
@@ -137,55 +139,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return tableNumbers;
 	}
 
-	public void updateTableInfo(String tableId, String tTitle) {
-		SQLiteDatabase db = this.getWritableDatabase();
-
-		ContentValues values = new ContentValues();
-		values.put(COLUMN_T_TITLE, tTitle);
-
-		// Define the WHERE clause to identify the specific table number
-		String whereClause = COLUMN_T_ID + "=?";
-		String[] whereArgs = {tableId};
-
-		// Update the table status
-		db.update(TABLE_T_NUMBER, values, whereClause, whereArgs);
-
-		Utils.logD("updateTableStatus "+db.getPath());
-		// Close the database
-		dbClose(db);
-	}
-
-	public void deleteTableRow(String tableId) {
-		SQLiteDatabase db = this.getWritableDatabase();
-
-		// Define the WHERE clause to identify the specific table number
-		String whereClause = COLUMN_T_ID + "=?";
-		String[] whereArgs = {tableId};
-
-		// Delete the row
-		db.delete(TABLE_T_NUMBER, whereClause, whereArgs);
-
-		// Close the database
-		dbClose(db);
-	}
-
-	public void updateTableStatus(int tableId, String newStatus) {
-		SQLiteDatabase db = this.getWritableDatabase();
-
-		ContentValues values = new ContentValues();
-		values.put(COLUMN_T_STATUS, newStatus);
-
-		// Define the WHERE clause to identify the specific table number
-		String whereClause = COLUMN_T_ID + "=?";
-		String[] whereArgs = {String.valueOf(tableId)};
-
-		// Update the table status
-		db.update(TABLE_T_NUMBER, values, whereClause, whereArgs);
-
-		Utils.logD("updateTableStatus "+db.getPath());
-		// Close the database
-		dbClose(db);
-	}
 
 
 	@SuppressLint("Range")
@@ -193,7 +146,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		List<MenuModelClass> tableNumbers = new ArrayList<>();
 
 		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.query(TABLE_MENU, new String[]{COLUMN_MENU_ID,COLUMN_MENU_TITLE,COLUMN_MENU_DESC,COLUMN_MENU_RATE}, null, null, null, null, null);
+		Cursor cursor = db.query(TABLE_MENU, null, null, null, null, null, null);
 
 		if (cursor != null && cursor.moveToFirst()) {
 			do {
@@ -211,7 +164,82 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		// Close the database
 		dbClose(db);
-		Utils.logD("getAllTableNumbers "+new Gson().toJson(tableNumbers));
+		Utils.logD("getAllMenu "+new Gson().toJson(tableNumbers));
 		return tableNumbers;
+	}
+
+	@SuppressLint("Range")
+	public List<OrderModelClass> getAllOrderItem() {
+		List<OrderModelClass> tableNumbers = new ArrayList<>();
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.query(TABLE_MENU, null, null, null, null, null, null);
+
+		if (cursor != null && cursor.moveToFirst()) {
+			do {
+				OrderModelClass modelClass=new OrderModelClass();
+				modelClass.setOrderId(cursor.getInt(cursor.getColumnIndex(COLUMN_ORDER_ID)));
+				modelClass.setOrderTableId(cursor.getInt(cursor.getColumnIndex(COLUMN_ORDER_T_ID)));
+				modelClass.setOrderMenuId(cursor.getInt(cursor.getColumnIndex(COLUMN_ORDER_MENU_ID)));
+				modelClass.setOrderQuantity(cursor.getInt(cursor.getColumnIndex(COLUMN_ORDER_QUANTITY)));
+				modelClass.setOrderStatus(cursor.getInt(cursor.getColumnIndex(COLUMN_ORDER_STATUS)));
+				tableNumbers.add(modelClass);
+			} while (cursor.moveToNext());
+
+			// Close the cursor to avoid memory leaks
+			cursor.close();
+		}
+
+		// Close the database
+		dbClose(db);
+		Utils.logD("getAllOrderItem "+new Gson().toJson(tableNumbers));
+		return tableNumbers;
+	}
+
+	//insert All Table information
+	public void insertInfo(String tableName,ContentValues values ) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		// Insert the new row, returning the primary key value of the new row
+		long newRowId = db.insert(tableName, null, values);
+
+		// Log the result or perform further actions based on the insertion
+		logD("MainActivity"+ "New customer inserted with ID: " + newRowId);
+
+		// Don't forget to close the database
+		dbClose(db);
+	}
+
+
+
+	//Update All Table information
+	public void updateInfo(String tableName,ContentValues values,String tableColumnName,String tableId ) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		// Define the WHERE clause to identify the specific table number
+		String whereClause = tableColumnName + "=?";
+		String[] whereArgs = {tableId};
+
+		// Update the table status
+		db.update(tableName, values, whereClause, whereArgs);
+
+		Utils.logD("updateInfo "+db.getPath());
+		// Close the database
+		dbClose(db);
+	}
+
+
+	public void deleteRow(String tableName, String tableColumnName,String tableId) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		// Define the WHERE clause to identify the specific table number
+		String whereClause = tableColumnName + "=?";
+		String[] whereArgs = {tableId};
+
+		// Delete the row
+		db.delete(tableName, whereClause, whereArgs);
+
+		// Close the database
+		dbClose(db);
 	}
 }

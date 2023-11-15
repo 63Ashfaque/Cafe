@@ -1,5 +1,13 @@
 package com.ashfaque.cafe.adapter;
 
+import static com.ashfaque.cafe.sqlite.DatabaseHelper.COLUMN_MENU_DESC;
+import static com.ashfaque.cafe.sqlite.DatabaseHelper.COLUMN_MENU_ID;
+import static com.ashfaque.cafe.sqlite.DatabaseHelper.COLUMN_MENU_RATE;
+import static com.ashfaque.cafe.sqlite.DatabaseHelper.COLUMN_MENU_TITLE;
+import static com.ashfaque.cafe.sqlite.DatabaseHelper.TABLE_MENU;
+
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashfaque.cafe.R;
 import com.ashfaque.cafe.model.MenuModelClass;
-import com.ashfaque.cafe.model.TnTableModelClass;
 import com.ashfaque.cafe.sqlite.DatabaseHelper;
 
 import java.util.List;
@@ -37,24 +44,31 @@ public class MenuTableAdapter extends RecyclerView.Adapter<MenuTableAdapter.View
 		return new ViewHolder(view);
 	}
 
+	@SuppressLint("SetTextI18n")
 	@Override
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 		MenuModelClass tableItem = tableList.get(position);
-//		holder.editTableName.setText(tableItem.getMenuTitle());
-		//holder.tvTableId.setText("" + tableItem.getMenuId());
-//		if (holder.editTableName.getText().length() > 0) {
-//			tName = holder.editTableName.getText().toString();
-//		}
+		holder.editMenuName.setText("" + tableItem.getMenuTitle());
+		holder.editMenuDesc.setText("" + tableItem.getMenuDesc());
+		holder.editMenuRate.setText("" + tableItem.getMenuRate());
+		holder.tvMenuId.setText("" + tableItem.getMenuId());
+
 		holder.btnSet.setOnClickListener(view ->
 		{
 			dbHelper = new DatabaseHelper(view.getContext());
-			dbHelper.updateTableInfo(holder.tvTableId.getText().toString(), holder.editTableName.getText().toString());
+
+			ContentValues values = new ContentValues();
+			values.put(COLUMN_MENU_TITLE, holder.editMenuName.getText().toString());
+			values.put(COLUMN_MENU_DESC, holder.editMenuDesc.getText().toString());
+			values.put(COLUMN_MENU_RATE, holder.editMenuRate.getText().toString());
+
+			dbHelper.updateInfo(TABLE_MENU, values, COLUMN_MENU_ID, holder.tvMenuId.getText().toString());
 		});
 
 		holder.btnDelete.setOnClickListener(view ->
 		{
 			dbHelper = new DatabaseHelper(view.getContext());
-			dbHelper.deleteTableRow(holder.tvTableId.getText().toString());
+			dbHelper.deleteRow(TABLE_MENU, COLUMN_MENU_ID, holder.tvMenuId.getText().toString());
 			tableList.remove(tableItem);
 			notifyDataSetChanged();
 		});
@@ -73,16 +87,20 @@ public class MenuTableAdapter extends RecyclerView.Adapter<MenuTableAdapter.View
 	}
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
-		EditText editTableName;
-		TextView tvTableId;
+		EditText editMenuName;
+		EditText editMenuDesc;
+		EditText editMenuRate;
+		TextView tvMenuId;
 		Button btnSet;
 		ImageView btnDelete;
 		ConstraintLayout constraintLayout;
 
 		public ViewHolder(@NonNull View itemView) {
 			super(itemView);
-			editTableName = itemView.findViewById(R.id.editTableName);
-			tvTableId = itemView.findViewById(R.id.tvTableId);
+			editMenuName = itemView.findViewById(R.id.editMenuName);
+			editMenuDesc = itemView.findViewById(R.id.editMenuDesc);
+			editMenuRate = itemView.findViewById(R.id.editMenuRate);
+			tvMenuId = itemView.findViewById(R.id.tvMenuId);
 			btnSet = itemView.findViewById(R.id.btnSet);
 			btnDelete = itemView.findViewById(R.id.btnDelete);
 			constraintLayout = itemView.findViewById(R.id.constraintLayout);

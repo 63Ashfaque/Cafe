@@ -1,22 +1,19 @@
 package com.ashfaque.cafe.fragment;
 
-import static com.ashfaque.cafe.Utils.logD;
-
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.ashfaque.cafe.R;
+import com.ashfaque.cafe.TableSettingActivity;
 import com.ashfaque.cafe.adapter.OrderTableAdapter;
 import com.ashfaque.cafe.sqlite.DatabaseHelper;
-import com.ashfaque.cafe.R;
-import com.google.gson.Gson;
 
 public class OrderFragment extends Fragment {
 
@@ -34,15 +31,24 @@ public class OrderFragment extends Fragment {
 	}
 
 	RecyclerView recyclerViewOrder;
+	TextView tvAddTable;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		View view= inflater.inflate(R.layout.fragment_order, container, false);
-		recyclerViewOrder=view.findViewById(R.id.recyclerViewOrder);
+		View view = inflater.inflate(R.layout.fragment_order, container, false);
+		recyclerViewOrder = view.findViewById(R.id.recyclerViewOrder);
 		OrderTableAdapter tableAdapter = new OrderTableAdapter(dbHelper.getAllTableNumbers());
 		recyclerViewOrder.setAdapter(tableAdapter);
+		if (tableAdapter.getItemCount() == 0) {
+			tvAddTable = view.findViewById(R.id.tvAddTable);
+			tvAddTable.setVisibility(View.VISIBLE);
+			tvAddTable.setOnClickListener(view1 ->
+			{
+				requireActivity().startActivity(new Intent(requireActivity(), TableSettingActivity.class));
+			});
+		}
 		return view;
 	}
 }

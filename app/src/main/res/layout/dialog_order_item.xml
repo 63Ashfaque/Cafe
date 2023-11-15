@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/_270sdp"
+    android:layout_height="@dimen/_500sdp"
+    android:padding="@dimen/_12sdp">
+    <TextView
+        android:id="@+id/tvCName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Customer Name  "
+        app:layout_constraintBottom_toBottomOf="@+id/edCName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edCName" />
+
+    <EditText
+        android:id="@+id/edCName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvCName"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="asdsd"/>
+
+    <TextView
+        android:id="@+id/tvCMobile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Customer Mobile No.  "
+        app:layout_constraintBottom_toBottomOf="@+id/edCMobile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edCMobile" />
+
+    <EditText
+        android:id="@+id/edCMobile"
+        android:layout_width="0dp"
+        android:digits="0123456789"
+        android:inputType="number"
+        android:maxLength="10"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvCMobile"
+        app:layout_constraintTop_toBottomOf="@+id/edCName"
+        tools:text="9876543210" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewItemOrder"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/dialogButtonOK"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edCMobile"
+        app:spanCount="2"
+        tools:itemCount="5"
+        tools:listitem="@layout/item_list_order_table" />
+
+
+    <Button
+        android:id="@+id/dialogButtonOK"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ok"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

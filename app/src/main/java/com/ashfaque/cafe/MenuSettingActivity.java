@@ -2,6 +2,10 @@ package com.ashfaque.cafe;
 
 import static com.ashfaque.cafe.Utils.dbClose;
 import static com.ashfaque.cafe.Utils.logD;
+import static com.ashfaque.cafe.sqlite.DatabaseHelper.COLUMN_MENU_DESC;
+import static com.ashfaque.cafe.sqlite.DatabaseHelper.COLUMN_MENU_RATE;
+import static com.ashfaque.cafe.sqlite.DatabaseHelper.COLUMN_MENU_TITLE;
+import static com.ashfaque.cafe.sqlite.DatabaseHelper.TABLE_MENU;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,28 +36,15 @@ public class MenuSettingActivity extends AppCompatActivity {
 		recyclerViewSetting.setAdapter(tableAdapter);
 
 		findViewById(R.id.fabAddMenu).setOnClickListener(view ->{
-			insertMenu();
+			//insert dummy data
+			ContentValues values = new ContentValues();
+			values.put(COLUMN_MENU_TITLE, "Menu ");
+			values.put(COLUMN_MENU_DESC, "Desc ");
+			values.put(COLUMN_MENU_RATE, "10");
+			dbHelper.insertInfo(TABLE_MENU,values);
+
 			tableAdapter.updateList(dbHelper.getAllMenu());
 			recyclerViewSetting.smoothScrollToPosition(tableAdapter.getItemCount()-1);
 		});
-	}
-
-
-	private void insertMenu() {
-		SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-		ContentValues values = new ContentValues();
-		values.put(DatabaseHelper.COLUMN_MENU_TITLE, "Menu ");
-		values.put(DatabaseHelper.COLUMN_MENU_DESC, "Desc ");
-		values.put(DatabaseHelper.COLUMN_MENU_RATE, "10");
-
-		// Insert the new row, returning the primary key value of the new row
-		long newRowId = db.insert(DatabaseHelper.TABLE_MENU, null, values);
-
-		// Log the result or perform further actions based on the insertion
-		logD("MainActivity"+ "New customer inserted with ID: " + newRowId);
-
-		// Don't forget to close the database
-		dbClose(db);
 	}
 }
