@@ -38,6 +38,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_CUSTOMER_NAME = "name";
 	public static final String COLUMN_CUSTOMER_MOBILE = "mobile";
 	public static final String COLUMN_CUSTOMER_PAID_AMOUNT = "paid_amount";
+	private static final String COLUMN_CUSTOMER_DATE = "date";
 
 
 
@@ -82,7 +83,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				+ COLUMN_CUSTOMER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 				+ COLUMN_CUSTOMER_NAME + " TEXT, "
 				+ COLUMN_CUSTOMER_MOBILE + " TEXT, "
-				+ COLUMN_CUSTOMER_PAID_AMOUNT + " REAL)";
+				+ COLUMN_CUSTOMER_PAID_AMOUNT + " REAL,"
+				+ COLUMN_CUSTOMER_DATE + " TEXT)";
 		db.execSQL(createCustomerTable);
 
 		// Create TABLE_T_NUMBER table
@@ -173,7 +175,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		List<OrderModelClass> tableNumbers = new ArrayList<>();
 
 		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.query(TABLE_MENU, null, null, null, null, null, null);
+		Cursor cursor = db.query(TABLE_ORDER, null, null, null, null, null, null);
 
 		if (cursor != null && cursor.moveToFirst()) {
 			do {

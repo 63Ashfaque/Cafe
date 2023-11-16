@@ -1,6 +1,10 @@
 package com.ashfaque.cafe.adapter;
 
+import static com.ashfaque.cafe.sqlite.DatabaseHelper.COLUMN_T_ID;
+import static com.ashfaque.cafe.sqlite.DatabaseHelper.COLUMN_T_TITLE;
+
 import android.app.Dialog;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashfaque.cafe.R;
+import com.ashfaque.cafe.WaiterActivity;
 import com.ashfaque.cafe.model.TnTableModelClass;
 import com.ashfaque.cafe.sqlite.DatabaseHelper;
 
@@ -51,33 +56,13 @@ public class OrderTableAdapter extends RecyclerView.Adapter<OrderTableAdapter.Vi
 
 		holder.constraintLayout.setOnClickListener(view ->
 		{
-			showDialogBox(view);
+			Intent intent=new Intent(view.getContext(), WaiterActivity.class);
+			intent.putExtra(COLUMN_T_ID,""+tableItem.getTableId());
+			intent.putExtra(COLUMN_T_TITLE,""+tableItem.getTableTitle());
+			view.getContext().startActivity(intent);
 		});
 
 	}
-
-	String[] spinnerCount = { "1","2","3","4","5","6","7","10",};
-
-	private void showDialogBox(View view) {
-		dbHelper = new DatabaseHelper(view.getContext());
-		// custom dialog
-		final Dialog dialog = new Dialog(view.getContext());
-		dialog.setContentView(R.layout.dialog_order_item);
-		dialog.setCancelable(false);
-		Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
-		RecyclerView recyclerViewItemOrder = dialog.findViewById(R.id.recyclerViewItemOrder);
-		ItemOrderTableAdapter tableAdapter = new ItemOrderTableAdapter(dbHelper.getAllOrderItem());
-		recyclerViewItemOrder.setAdapter(tableAdapter);
-		// if button is clicked, close the custom dialog
-		dialogButton.setOnClickListener(v -> {
-			dialog.dismiss();
-			Toast.makeText(view.getContext(), "Dismissed..!!",Toast.LENGTH_SHORT).show();
-		});
-
-
-		dialog.show();
-	}
-
 	@Override
 	public int getItemCount() {
 		return tableList.size();

@@ -49,7 +49,7 @@ public class ItemOrderTableAdapter extends RecyclerView.Adapter<ItemOrderTableAd
 	@SuppressLint("SetTextI18n")
 	@Override
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-		OrderModelClass tableItem = tableList.get(position);
+	//	OrderModelClass tableItem = tableList.get(position);
 	//	holder.checkbox.setText("" + tableItem.getOrderId());
 //		holder.editMenuDesc.setText("" + tableItem.getMenuDesc());
 //		holder.editMenuRate.setText("" + tableItem.getMenuRate());
